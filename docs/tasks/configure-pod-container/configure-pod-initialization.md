@@ -19,11 +19,11 @@ application Container runs.
 -->
 
 ---
-标题: 配置Pod初始化
+title: 配置Pod初始化
 ---
 
 {% capture overview %}
-这篇教程指导如何在应用运行之前使用初始容器来初始化一个Pod。
+这篇教程指导如何在应用运行之前使用Init容器来初始化一个Pod。
 
 {% endcapture %}
 
@@ -50,16 +50,16 @@ In the configuration file, you can see that the Pod has a Volume that the init
 container and the application container share.
 -->
 
-## 创建一个含有初始容器的Pod
+## 创建一个含有Init容器的Pod
 
-在这个例子里，我们会创建一个包含一个应用容器和一个初始容器的Pod，这个初始
+在这个例子里，我们会创建一个包含一个应用容器和一个Init容器的Pod，这个Init
 容器会在应用容器开始前完成它的工作。
 
 这是Pod的配置文件:
 
 {% include code.html language="yaml" file="init-containers.yaml" ghlink="/docs/tasks/configure-pod-container/init-containers.yaml" %}
 
-在这个配置文件里，您可以看到Pod有一个初始容器和应用容器共享的存储卷。
+在这个配置文件里，您可以看到Pod有一个Init容器和应用容器共享的存储卷。
 
 <!--
 The init container mounts the
@@ -86,12 +86,12 @@ The output shows that the nginx container is running:
     nginx     1/1       Running   0          43m
 -->
 
-初始容器将这个卷挂载在`/work-dir`,而应用容器则挂载在`/usr/share/nginx/html`。
-初始容器运行下面的命令并结束：
+Init容器将这个卷挂载在`/work-dir`,而应用容器则挂载在`/usr/share/nginx/html`。
+Init容器运行下面的命令并结束：
 
      wget -O /work-dir/index.html http://kubernetes.io
 
-注意到初始容器往nginx的根目录写入了`index.html`这个文件。
+注意到Init容器往nginx的根目录写入了`index.html`这个文件。
 
 创建Pod:
 
@@ -142,7 +142,7 @@ The output shows that nginx is serving the web page that was written by the init
     root@nginx:~# apt-get install curl
     root@nginx:~# curl localhost
 
-下面输出显示了nginx正在提供网页服务并使用了初始容器写入的内容：
+下面输出显示了nginx正在提供网页服务并使用了Init容器写入的内容：
 
     <!Doctype html>
     <html id="home">
@@ -177,10 +177,10 @@ The output shows that nginx is serving the web page that was written by the init
 {% capture whatsnext %}
 
 * 了解更多
-[Pod里容器的通讯](/docs/tasks/configure-pod-container/communicate-containers-same-pod/).
-* 了解更多[初始容器](/docs/concepts/workloads/pods/init-containers/).
+[Pod里的容器间通讯](/docs/tasks/configure-pod-container/communicate-containers-same-pod/).
+* 了解更多[Init容器](/docs/concepts/workloads/pods/init-containers/).
 * 了解更多[存储卷](/docs/concepts/storage/volumes/).
-* 了解更多[初始容器纠错](/docs/tasks/debug-application-cluster/debug-init-containers/)
+* 了解更多[Init容器纠错](/docs/tasks/debug-application-cluster/debug-init-containers/)
 
 {% endcapture %}
 
