@@ -17,7 +17,7 @@ title: Configure Your Cloud Provider's Firewalls
 <!-- exposure to the internet.  When exposing a service to the external world, you may need to open up -->
 <!-- one or more ports in these firewalls to serve traffic.  This document describes this process, as -->
 <!-- well as any provider specific details that may be necessary. -->
-许多云服务商（比如 Google Compute Engine）会定义防火墙以防止服务无意间暴露到 internet 上。
+许多云服务商（比如 Google Compute Engine）会定义防火墙以防止服务无意间暴露到公网上。
 当暴露服务给外网时，你可能需要在防火墙上开启一个或者更多的端口来提供服务。
 本文描述了这个过程，以及其他云服务商平台的具体信息。
 
@@ -122,13 +122,13 @@ $ gcloud compute firewall-rules create my-rule --allow=tcp:<port>
    * 你在防火墙上为集群的所有节点都打开了 80 端口，可以让外部的服务可以向你的
      服务发送数据包。
    * 你又在虚拟机（IP 为2.3.4.5）上使用 80 端口启动了一台 nginx 服务器。
-     这个 nginx 通过虚拟机的外部 IP 地址也被暴露到了 internet 上。
+     这个 nginx 通过虚拟机的外部 IP 地址也被暴露到了公网上。
 
 <!-- Consequently, please be careful when opening firewalls in Google Compute Engine -->
 <!-- or Google Container Engine.  You may accidentally be exposing other services to -->
 <!-- the wilds of the internet. -->
 因此，在 Google Compute Engine 或者 Google Container Engine 上开启防火墙端口时请
-小心。你可能无意间把其他服务也暴露给了 internet。
+小心。你可能无意间把其他服务也暴露给了公网。
 
 <!-- This will be fixed in an upcoming release of Kubernetes. -->
 这个问题会在 Kubernetes 后续版本中被修复。
