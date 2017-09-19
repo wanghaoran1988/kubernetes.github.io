@@ -1,6 +1,6 @@
 # K8SMeetup 翻译流程与翻译校稿规范
 
-time：2017-07-13 update：2017-08-30 author：xiaolong@caicloud.io
+time：2017-07-13 update：2017-09-19 author：xiaolong@caicloud.io
 
 翻译背景: 分析之前很多的翻译为什么做不好，就是因为迭代太快，版本跟不上，旧的文件没翻译完，新旧文件又混一起。没有一个适合的版本管理流程，这也是我们不建议大家从官网直接提取文件的原因。
 
