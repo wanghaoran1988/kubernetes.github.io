@@ -5,7 +5,7 @@ title: Controller manager metrics
 {% capture overview %}
 <!--Controller manager metrics provide important insight into the performance and health of
 the controller manager.-->
-Controller manager指标对深入了解Controller manager的运行健康状况具有重要意义。
+控制管理器指标对深入了解Controller manager的运行健康状况具有重要意义。
 
 {% endcapture %}
 
@@ -50,7 +50,7 @@ cloudprovider_gce_api_request_duration_seconds { request = "list_disk"}
 <!--from the host where the controller-manager is running.-->
 
 <!--The metrics are emitted in [prometheus format](https://prometheus.io/docs/instrumenting/exposition_formats/) and are human readable.-->
-指标以[Prometheus格式](https://prometheus.io/docs/instrumenting/exposition_formats/) 发布并且可读。
+指标以[Prometheus格式](https://prometheus.io/docs/instrumenting/exposition_formats/)发布并且可读。
 
 <!--In a production environment you may want to configure prometheus or some other metrics scraper
 to periodically gather these metrics and make them available in some kind of time series database.-->
