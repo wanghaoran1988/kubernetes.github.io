@@ -117,6 +117,29 @@ Kubernetes 文档由若干 `md` 和 `html` 文档构成,翻译即是将原始 `m
 * **自修复**: 它可以自保持应用状态、可自重启、自复制、自缩放的，通过声明式语法提供了强大的自修复能力
 ```
 
+注意： 在页头增加元数据 `metadata`, `cn-approvers` 写上译者的 `github` 用户名，如果有多个译者写个多个译者的 `github` 用户名，`cn-review` 写上帮忙 `review` 的其他译者，同样也支持多个 `review` 译者。文章有更新，`cn-approvers-update` 也需要加上更新的译者用户名，示例如下：
+
+```
+---
+title: 通过聚合层扩展 kubernetes API
+approvers:
+- lavalamp
+- cheftako
+- chenopis
+cn-approvers:
+- rootsongjc
+- xxx
+cn-approvers-update:
+- rootsongjc
+- xxx
+cn-review:
+- markthink
+- xxx
+---
+```
+
+加入元数据，方便上游跟踪文件的译者、更新译者与 review 译者。
+
 ### 翻译规范
 
 - 译文中的英文与中文建议用空格分隔
