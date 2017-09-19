@@ -11,12 +11,12 @@ Controller manager指标对深入了解Controller manager的运行健康状况�
 
 {% capture body %}
 <!--## What are controller manager metrics-->
-## 什么是Controller manager 指标
+## 什么是控制管理器指标
 <!--Controller manager metrics provide important insight into the performance and health of the controller manager.
 These metrics include common Go language runtime metrics such as go_routine count and controller specific metrics such as
 etcd request latencies or Cloudprovider (AWS, GCE, Openstack) API latencies that can be used
 to gauge the health of a cluster.-->
-Controller manager指标对深入了解Controller manager的运行健康状况具有重要意义。
+控制管理器指标对深入了解控制管理器的运行健康状况具有重要意义。
 监控指标包括：
 1、常用的Go语言运行指标（例如go_routine的数量）
 2、可以度量K8s集群运行健康状况的控制器特征指标（例如etcd请求延迟或云服务提供商AWS、GCE和OpenStack的API请求延迟）。
@@ -45,7 +45,7 @@ cloudprovider_gce_api_request_duration_seconds { request = "list_disk"}
 ## 配置
 
 <!--In a cluster, controller-manager metrics are available from -->
-在一个K8s集群中，使用者可从Controller-manager正在运行的主机上获取Controller manger指标库。地址如下所示。
+在一个K8s集群中，使用者可从正在运行控制管理器的主机上获取控制管理器指标库。地址如下所示。
 `http://localhost:10252/metrics`
 <!--from the host where the controller-manager is running.-->
 
