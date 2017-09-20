@@ -157,7 +157,7 @@ To optionally enforce `kube-reserved` on system daemons, specify the parent
 control group for kube daemons as the value for `--kube-reserved-cgroup` kubelet
 flag.
 -->
-要选择性的在系统守护进程上执行 `kube-reserved`，请将 kube 守护进程的父控制组设置为 kubelet 的 `--kube-reserved-cgroup` 标志的值。
+要选择性的在系统守护进程上执行 `kube-reserved`，需要把  kubelet 的 `--kube-reserved-cgroup` 标志的值设置为 kube 守护进程的父控制组。
 
 <!--
 It is recommended that the kubernetes system daemons are placed under a top
@@ -190,7 +190,7 @@ like `sshd`, `udev`, etc. `system-reserved` should reserve `memory` for the
 Reserving resources for user login sessions is also recommended (`user.slice` in
 systemd world).
 -->
-`system-reserved` 用于为诸如 `sshd`、`udev` 等系统守护进程争取资源预留。`system-reserved` 也应该为 `kernel` 预留内存，因为目前它使用的内存并不记在 Kubernetes 的 pod 上。同时还推荐为用户登录会话预留资源（systemd 世界中的 `user.slice`）。
+`system-reserved` 用于为诸如 `sshd`、`udev` 等系统守护进程争取资源预留。`system-reserved` 也应该为 `kernel` 预留 `内存`，因为目前 `kernel` 使用的内存并不记在 Kubernetes 的 pod 上。同时还推荐为用户登录会话预留资源（systemd 体系中的 `user.slice`）。
 
 <!--
 To optionally enforce `system-reserved` on system daemons, specify the parent
@@ -214,7 +214,7 @@ exist. Kubelet will fail if an invalid cgroup is specified.
 <!--
 ### Eviction Thresholds
 -->
-### 移除门限（Eviction Thresholds）
+### 驱逐阈值（Eviction Thresholds）
 
 - **Kubelet Flag**: `--eviction-hard=[memory.available<500Mi]`
 
@@ -229,7 +229,7 @@ availability on the node drops below the reserved value. Hypothetically, if
 system daemons did not exist on a node, pods cannot use more than `capacity -eviction-hard`. For this reason, resources reserved for evictions are not
 available for pods.
 -->
-节点级别的内存压力将导致系统内存不足（System OOMs），这将影响到整个节点及其上运行的所有 pod。节点可以暂时离线直到内存已经回收为止。为了防止（或减少可能性）系统内存不足，kubelet 提供了 [`资源不足（Out of Resource）`](./out-of-resource.md) 管理。移除（Eviction）操作只支持  `memory` 和 `storage`。通过 `--eviction-hard` 标志预留一些内存后，当节点上的可用内存降至保留值之下时，`kubelet` 将尝试 `移除` pod。假设，如果节点上不存在系统守护进程，pod 将不能使用超过 `capacity - eviction-hard` 的资源。因此，为移除而预留的资源对 pod 是不可用的。
+节点级别的内存压力将导致系统内存不足（System OOMs），这将影响到整个节点及其上运行的所有 pod。节点可以暂时离线直到内存已经回收为止。为了防止（或减少可能性）系统内存不足，kubelet 提供了 [`资源不足（Out of Resource）`](./out-of-resource.md) 管理。驱逐（Eviction）操作只支持  `memory` 和 `storage`。通过 `--eviction-hard` 标志预留一些内存后，当节点上的可用内存降至保留值以下时，`kubelet` 将尝试 `驱逐` pod。假设，如果节点上不存在系统守护进程，pod 将不能使用超过 `capacity-eviction-hard` 的资源。因此，为驱逐而预留的资源对 pod 是不可用的。
 
 <!--
 ### Enforcing Node Allocatable
@@ -250,7 +250,7 @@ by evicting pods whenever the overall usage across all pods exceeds
 [here](./out-of-resource.md#eviction-policy). This enforcement is controlled by
 specifying `pods` value to the kubelet flag `--enforce-node-allocatable`.
 -->
-`kubelet` 默认在 pod 中执行 `Allocatable`。无论何时，如果所有 pod 的总用量超过了 `Allocatable`，移除 pod 的措施将被执行。有关移除策略的更多细节可以在 [这里](./out-of-resource.md#eviction-policy) 找到。请通过设置 kubelet `--enforce-node-allocatable` 标志值为 `pods` 控制这个措施。
+`kubelet` 默认在 pod 中执行 `Allocatable`。无论何时，如果所有 pod 的总用量超过了 `Allocatable`，驱逐 pod 的措施将被执行。有关驱逐策略的更多细节可以在 [这里](./out-of-resource.md#eviction-policy) 找到。请通过设置 kubelet `--enforce-node-allocatable` 标志值为 `pods` 控制这个措施。
 
 <!--
 Optionally, `kubelet` can be made to enforce `kube-reserved` and
@@ -333,14 +333,14 @@ Kubelet evicts pods whenever the overall memory usage exceeds across pods exceed
 or if overall disk usage exceeds `88Gi` If all processes on the node consume as
 much CPU as they can, pods together cannot consume more than `14.5 CPUs`.
 -->
-在这个场景下，`Allocatable` 将会是 `14.5 CPUs`、`28.5Gi` 内存以及 `98Gi` 存储。调度器保证这个节点上的所有 pod 请求的内存总量不超过 `28.5Gi`，存储不超过 `88Gi`。当 pod 的内存使用总量超过 `28.5Gi` 或者磁盘使用总量超过 `88Gi` 时，Kubelet 将会移除它们。如果节点上的所有进程都尽可能多的使用 CPU，则 pod 加起来不能使用超过 `14.5 CPUs` 的资源。
+在这个场景下，`Allocatable` 将会是 `14.5 CPUs`、`28.5Gi` 内存以及 `98Gi` 存储。调度器保证这个节点上的所有 pod 请求的内存总量不超过 `28.5Gi`，存储不超过 `88Gi`。当 pod 的内存使用总量超过 `28.5Gi` 或者磁盘使用总量超过 `88Gi` 时，Kubelet 将会驱逐它们。如果节点上的所有进程都尽可能多的使用 CPU，则 pod 加起来不能使用超过 `14.5 CPUs` 的资源。
 
 <!--
 If `kube-reserved` and/or `system-reserved` is not enforced and system daemons
 exceed their reservation, `kubelet` evicts pods whenever the overall node memory
 usage is higher than `31.5Gi` or `storage` is greater than `90Gi`
 -->
-当没有执行 `kube-reserved` 和/或 `system-reserved` 且系统守护进程使用量超过其预留时，如果节点内存用量高于 `31.5Gi` 或存储大于 `90Gi`，`kubelet` 将会移除 pod。
+当没有执行 `kube-reserved` 和/或 `system-reserved` 且系统守护进程使用量超过其预留时，如果节点内存用量高于 `31.5Gi` 或存储大于 `90Gi`，`kubelet` 将会驱逐 pod。
 
 <!--
 ## Feature Availability
