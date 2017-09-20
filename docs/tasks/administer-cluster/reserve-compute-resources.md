@@ -3,6 +3,11 @@ approvers:
 - vishh
 - derekwaynecarr
 - dashpole
+cn-approvers:
+- xiaosuiba
+cn-reviewers:
+- zjj2wry
+- zhangqx2010
 title: 为系统守护进程预留计算资源
 ---
 <!--
@@ -65,7 +70,7 @@ on each node.
 that are available for pods. The scheduler does not over-subscribe
 `Allocatable`. `CPU`, `memory` and `storage` are supported as of now.
 -->
-Kubernetes 节点上的 `Allocatable` 定义了 pod 可用计算资源量。调度器不会超额申请  `Allocatable`。目前支持 `CPU`, `memory` 和 `storage` 这几个参数。
+Kubernetes 节点上的 `Allocatable` 被定义为 pod 可用计算资源量。调度器不会超额申请  `Allocatable`。目前支持 `CPU`, `memory` 和 `storage` 这几个参数。
 
 <!--
 Node Allocatable is exposed as part of `v1.Node` object in the API and as part
@@ -81,7 +86,7 @@ Resources can be reserved for two categories of system daemons in the `kubelet`.
 <!--
 ### Enabling QoS and Pod level cgroups
 -->
-### 启用 QoS 和 Pod 层级的 cgroups
+### 启用 QoS 和 Pod 级别的 cgroups
 
 <!--
 To properly enforce node allocatable constraints on the node, you must
@@ -89,7 +94,7 @@ enable the new cgroup hierarchy via the `--cgroups-per-qos` flag.  This flag is
 enabled by default.  When enabled, the `kubelet` will parent all end-user pods
 under a cgroup hierarchy managed by the `kubelet`.
 -->
-为了恰当的在节点范围实施 node allocatable，您必须通过 `--cgroups-per-qos` 标志启用新的 cgroup 层次结构。这个标识时默认启用的。启用后，`kubelet` 将在其管理的 cgroup 层次结构中创建所有终端用户的 pod。
+为了恰当的在节点范围实施 node allocatable，您必须通过 `--cgroups-per-qos` 标志启用新的 cgroup 层次结构。这个标志是默认启用的。启用后，`kubelet` 将在其管理的 cgroup 层次结构中创建所有终端用户的 pod。
 
 <!--
 ### Configuring a cgroup driver
@@ -114,7 +119,7 @@ The supported values are the following:
 支持的参数值如下：
 
 * `cgroupfs` 是默认的驱动，在主机上直接操作 cgroup 文件系统以对 cgroup 沙箱进行管理。
-* `systemd` 是可替代的驱动，使用资源的瞬时切片管理 cgroup 沙箱，这需要 init 系统支持。
+* `systemd` 是可选的驱动，使用 init 系统支持的资源的瞬时切片管理 cgroup 沙箱。
 
 <!--
 Depending on the configuration of the associated container runtime,
@@ -123,7 +128,7 @@ proper system behavior.  For example, if operators use the `systemd`
 cgroup driver provided by the `docker` runtime, the `kubelet` must
 be configured to use the `systemd` cgroup driver.
 -->
-取决于相关容器运行时的配置，操作员可能需要选择一个特定的 cgroup 驱动来保证系统正常运行。例如如果操作员使用 `docker` 运行时提供的 cgroup 驱动时，必须配置 `kubelet` 使用 `systemd` cgroup 驱动。
+取决于相关容器运行时（container runtime）的配置，操作员可能需要选择一个特定的 cgroup 驱动来保证系统正常运行。例如如果操作员使用 `docker` 运行时提供的 cgroup 驱动时，必须配置 `kubelet` 使用 `systemd` cgroup 驱动。
 
 <!--
 ### Kube Reserved
@@ -224,7 +229,7 @@ availability on the node drops below the reserved value. Hypothetically, if
 system daemons did not exist on a node, pods cannot use more than `capacity -eviction-hard`. For this reason, resources reserved for evictions are not
 available for pods.
 -->
-节点层级的内存压力将导致系统内存不足（System OOMs），这将影响到整个节点及其上运行的所有 pod。节点可以暂时离线直到内存已经回收为止。为了防止（或减少可能性）系统内存不足，kubelet 提供了  [`资源不足（Out of Resource）`](./out-of-resource.md) 管理。移除（Eviction）操作只支持  `memory` 和 `storage`。通过 `--eviction-hard` 标志预留一些内存后，当节点上的可用内存降至保留值之下时，`kubelet` 将尝试 `移除` pod。假设，如果节点上不存在系统守护进程，pod 将不能使用超过 `capacity - eviction-hard` 的资源。因此，为移除而预留的资源对 pod 是不可用的。
+节点级别的内存压力将导致系统内存不足（System OOMs），这将影响到整个节点及其上运行的所有 pod。节点可以暂时离线直到内存已经回收为止。为了防止（或减少可能性）系统内存不足，kubelet 提供了 [`资源不足（Out of Resource）`](./out-of-resource.md) 管理。移除（Eviction）操作只支持  `memory` 和 `storage`。通过 `--eviction-hard` 标志预留一些内存后，当节点上的可用内存降至保留值之下时，`kubelet` 将尝试 `移除` pod。假设，如果节点上不存在系统守护进程，pod 将不能使用超过 `capacity - eviction-hard` 的资源。因此，为移除而预留的资源对 pod 是不可用的。
 
 <!--
 ### Enforcing Node Allocatable
@@ -254,7 +259,7 @@ the same flag. Note that to enforce `kube-reserved` or `system-reserved`,
 `--kube-reserved-cgroup` or `--system-reserved-cgroup` needs to be specified
 respectively.
 -->
-可选的，通过在相同标志中同时指定 `kube-reserved` 和 `system-reserved` 值能够使 `kubelet` 执行 `kube-reserved` 和 `system-reserved`。
+可选的，通过在相同标志中同时指定 `kube-reserved` 和 `system-reserved` 值能够使 `kubelet` 执行 `kube-reserved` 和 `system-reserved`。请注意，要想执行 `kube-reserved` 或者 `system-reserved`时，需要分别指定 `--kube-reserved-cgroup` 或者 `--system-reserved-cgroup`。
 
 <!--
 ## General Guidelines
@@ -269,7 +274,7 @@ have its own control group and share `Kube-reserved` resources with the
 container runtime. However, Kubelet cannot burst and use up all available Node
 resources if `kube-reserved` is enforced.
 -->
-系统守护进程期望被按照类似 `Guaranteed` pod 一样对待。系统守护进程可以在其范围控制组中爆发式增长，您需要将这个行为作为 kubernetes 部署的一部分进行管理。例如，`kubelet` 应该有它自己的控制组并和容器运行时（container runtime）共享 `Kube-reserved` 资源。然而，如果执行了 `kube-reserved`，则 Kubelete 不能突然爆发并耗尽节点的所有可用资源。
+系统守护进程期望被按照类似 `Guaranteed` pod 一样对待。系统守护进程可以在其范围控制组中爆发式增长，您需要将这个行为作为 kubernetes 部署的一部分进行管理。例如，`kubelet` 应该有它自己的控制组并和容器运行时（container runtime）共享 `Kube-reserved` 资源。然而，如果执行了 `kube-reserved`，则 kubelete 不能突然爆发并耗尽节点的所有可用资源。
 
 <!--
 Be extra careful while enforcing `system-reserved` reservation since it can lead
@@ -278,14 +283,14 @@ recommendation is to enforce `system-reserved` only if a user has profiled their
 nodes exhaustively to come up with precise estimates and is confident in their
 ability to recover if any process in that group is oom_killed.
 -->
-在执行  `system-reserved` 预留操作时请加倍小心，因为它可能导致节点上的关键系统服务 CPU 资源短缺或因为 OOM 而被终止。
+在执行 `system-reserved` 预留操作时请加倍小心，因为它可能导致节点上的关键系统服务 CPU 资源短缺或因为内存不足（OOM）而被终止。
 
 <!--
 * To begin with enforce `Allocatable` on `pods`.
 * Once adequate monitoring and alerting is in place to track kube system
   daemons, attempt to enforce `kube-reserved` based on usage heuristics.
 * If absolutely necessary, enforce `system-reserved` over time.
--->
+  -->
 * 在 `pods` 上执行 `Allocatable` 作为开始。
 * 一旦足够用于追踪系统守护进程的监控和告警的机制到位，请尝试基于用量探索（usage heuristics）方式执行 `kube-reserved`。
 * 随着时间推进，如果绝对必要，可以执行 `system-reserved`。
@@ -313,7 +318,7 @@ Here is an example to illustrate Node Allocatable computation:
 * `--kube-reserved` is set to `cpu=1,memory=2Gi,storage=1Gi`
 * `--system-reserved` is set to `cpu=500m,memory=1Gi,storage=1Gi`
 * `--eviction-hard` is set to `memory.available<500Mi,nodefs.available<10%`
--->
+  -->
 * 节点拥有 `32Gi 内存`，`16 核 CPU` 和 `100Gi 存储`
 * `--kube-reserved` 设置为 `cpu=1,memory=2Gi,storage=1Gi`
 * `--system-reserved` 设置为 `cpu=500m,memory=1Gi,storage=1Gi`
