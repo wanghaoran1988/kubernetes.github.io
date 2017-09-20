@@ -197,7 +197,7 @@ To optionally enforce `system-reserved` on system daemons, specify the parent
 control group for OS system daemons as the value for `--system-reserved-cgroup`
 kubelet flag.
 -->
-要想在系统守护进程上可选地执行 `system-reserved`，请指定 `--system-reserved-cgroup` kubelete 标志的值为 OS 系统守护进程的父级控制组。
+要想在系统守护进程上可选地执行 `system-reserved`，请指定 `--system-reserved-cgroup` kubelet 标志的值为 OS 系统守护进程的父级控制组。
 
 <!--
 It is recommended that the OS system daemons are placed under a top level
@@ -209,7 +209,7 @@ control group (`system.slice` on systemd machines for example).
 Note that Kubelet **does not** create `--system-reserved-cgroup` if it doesn't
 exist. Kubelet will fail if an invalid cgroup is specified.
 -->
-请注意，如果 `--system-reserved-cgroup` 不存在，Kubelete **不会**创建它。如果指定了无效的 cgroup，Kubelet 将会失败。
+请注意，如果 `--system-reserved-cgroup` 不存在，Kubelet **不会**创建它。如果指定了无效的 cgroup，Kubelet 将会失败。
 
 <!--
 ### Eviction Thresholds
@@ -274,7 +274,7 @@ have its own control group and share `Kube-reserved` resources with the
 container runtime. However, Kubelet cannot burst and use up all available Node
 resources if `kube-reserved` is enforced.
 -->
-系统守护进程期望被按照类似 `Guaranteed` pod 一样对待。系统守护进程可以在其范围控制组中爆发式增长，您需要将这个行为作为 kubernetes 部署的一部分进行管理。例如，`kubelet` 应该有它自己的控制组并和容器运行时（container runtime）共享 `Kube-reserved` 资源。然而，如果执行了 `kube-reserved`，则 kubelete 不能突然爆发并耗尽节点的所有可用资源。
+系统守护进程期望被按照类似 `Guaranteed` pod 一样对待。系统守护进程可以在其范围控制组中爆发式增长，您需要将这个行为作为 kubernetes 部署的一部分进行管理。例如，`kubelet` 应该有它自己的控制组并和容器运行时（container runtime）共享 `Kube-reserved` 资源。然而，如果执行了 `kube-reserved`，则 kubelet 不能突然爆发并耗尽节点的所有可用资源。
 
 <!--
 Be extra careful while enforcing `system-reserved` reservation since it can lead
